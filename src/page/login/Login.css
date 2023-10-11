@@ -1,0 +1,120 @@
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: none;
+    z-index: 9999;
+  }
+  
+.loadingSpinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.login-body{
+    width: 100%;
+    height: 100vh;
+    /* background-image: url("../img/background1.jpg"); */
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login{
+    width: 50%;
+    height: 400px;
+    background-color: #fff;
+    box-shadow: 5px 5px 20px 5px rgba(39, 189, 190, 0.15),
+                -5px 5px 20px 5px rgba(39, 189, 190, 0.15),
+                5px -5px 20px 5px rgba(39, 189, 190, 0.15),
+                -5px -5px 20px 5px rgba(39, 189, 190, 0.15)
+    ;
+    display: flex;
+}
+.loginLeft{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loginLeft img{
+    width: 300px;
+}
+.loginRight{
+    width: 50%;
+    height: 100%;
+    background-color: #27bdbe;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+h1{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+}
+.loginRight input{
+    margin-bottom: 30px;
+    height: 30px;
+    width: 200px;
+    font-size: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 15px;
+    border: none;
+}
+.loginRight input:focus{
+    outline: none;
+}
+.loginRight button{
+    border: 2px solid #fff;
+    border-radius: 25px;
+    padding: 10px 20px;
+    background-color: #27bdbe;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+.loginRight button:hover{
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    color: yellow
+}
+.user-icon{
+    background-image: url("../../../public/assets/img/user.png");
+}
+.pass-icon{
+    background-image: url("../../../public/assets/img/lock.png");
+}
+.user-icon, .pass-icon{
+    background-repeat: no-repeat;
+    background-size: 15px 15px;
+    background-position: 95%;
+}
+.btnLogOut{
+    border: none;
+    padding: 5px 10px;
+    border: 1px solid #27bdbe;
+    background-color: #27bdbe;
+    color: #fff;
+    border-radius: 5px;
+}
+#validate{
+    color: #fff;
+    margin-bottom: 10px;
+}
