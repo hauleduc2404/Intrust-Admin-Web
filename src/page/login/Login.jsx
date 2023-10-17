@@ -66,7 +66,7 @@ export default function Login () {
                 <div className="login-body">
                     <div className="login">
                         <div className="loginLeft">
-                            <img src="assets/img/key-solution.png" alt="" />
+                            <img src={require('../../assets/img/key-solution.png')} alt=""></img>
                         </div>
                         <div className="loginRight">
                             <h1>Welcome!</h1>

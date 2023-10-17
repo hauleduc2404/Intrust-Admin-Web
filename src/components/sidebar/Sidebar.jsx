@@ -1,3 +1,4 @@
+/* eslint-disable import/no-absolute-path */
 import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -8,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ImageIcon from '@mui/icons-material/Image';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
-import { InputAdornment, TextField } from '@mui/material';
+import { InputAdornment, TextField, Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
 import ArticleIcon from '@mui/icons-material/Article';
 import './Sidebar.css';
@@ -19,6 +20,7 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
   width: drawerWidth,
   flexShrink: 0,
   '& .MuiDrawer-paper': {
+    color: 'red',
     width: drawerWidth,
     boxSizing: 'border-box'
   }
@@ -41,12 +43,17 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
 
 export default function Sidebar () {
   return (
-    <StyledDrawer variant="permanent" anchor="left">
+    <StyledDrawer variant="permanent" anchor="left" >
+        <a href="#" className="brand-link">
+        <img className= "avatar" src={require('../../assets/img/avatar.png')} alt="Intrust Admin Logo" width="32" height="32"></img>
+        <span className="brand-text">Intrust Admin</span>
+      </a>
       <TextField
         id="search"
         type="search"
         label="Search"
         size="small"
+        style={{ marginTop: '20px' }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -57,7 +64,7 @@ export default function Sidebar () {
       />
       <List >
       <Link to="/news" className="linkTo">
-        <ListItem sx={{ color: 'red' }}>
+        <ListItem >
           <ListItemIcon>
             <ArticleIcon />
           </ListItemIcon>

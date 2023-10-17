@@ -96,10 +96,10 @@ h1{
     color: yellow
 }
 .user-icon{
-    background-image: url("../../../public/assets/img/user.png");
+    background-image: url("../../../src/assets/img/user.png");
 }
 .pass-icon{
-    background-image: url("../../../public/assets/img/lock.png");
+    background-image: url("../../../src/assets/img/lock.png");
 }
 .user-icon, .pass-icon{
     background-repeat: no-repeat;

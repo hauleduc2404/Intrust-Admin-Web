@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Sidebar from '../../components/sidebar/Sidebar';
-import Header from '../../components/header/Header';
 import { Box, Button, Container, Toolbar, CssBaseline, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import Header from '../../components/header/Header';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
@@ -11,9 +11,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import CreateBanner from './CreateBanner';
 
 const defaultTheme = createTheme();
-export default function NewsPage () {
+export default function Banner () {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -25,7 +26,7 @@ export default function NewsPage () {
   }));
 
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
-  const [news, setNews] = React.useState();
+  const [banner, setBanner] = React.useState();
   const [isPopupOpenInfo, setIsPopupOpenInfo] = React.useState(false);
   const [selectAPI, setSelectAPI] = React.useState();
   const handleSelectAPI = (a) => {
@@ -45,7 +46,7 @@ export default function NewsPage () {
   const handleOpenPopupEdit = () => {
     setIsPopupEdit(true);
   };
-  const handleEditNews = (u) => {
+  const handleSelectAPIEdit = (u) => {
     handleOpenPopupEdit();
     setSelectAPI(u);
   };
@@ -61,21 +62,27 @@ export default function NewsPage () {
     headers: myHeaders
   };
   useEffect(() => {
-    fetch('http://localhost:8081/api/v1/get-all-news', requestOptions)
+    fetch('http://localhost:8081/api/admin/banner/get-all-banner', requestOptions)
       .then(response => response.json())
       .then(result => {
-        setNews(result.body);
+        setBanner(result.body);
         console.log(result);
       })
       .catch(error => console.log('error', error));
   }, []);
-  // console.log(banner);
+  console.log(banner);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const handleDeleteNews = (id) => {
-    const confirmDelete = window.confirm('Bạn chắc chắn muốn xóa tin?');
+
+  const [status, setStatus] = React.useState('');
+
+  const handleChange = (event) => {
+    setStatus(event.target.value);
+  };
+  const handleDeleteBanner = (id) => {
+    const confirmDelete = window.confirm('Bạn chắc chắn muốn xóa banner?');
     if (confirmDelete) {
       const myHeaders = new Headers();
       myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
@@ -85,13 +92,12 @@ export default function NewsPage () {
         headers: myHeaders
       };
 
-      fetch(`http://localhost:8081/api/admin/delete/${id}`, requestOption)
+      fetch(`http://localhost:8081/api/admin/banner/delete-banner/${id}`, requestOption)
         .then(response => response.json())
         .then(result => {
         })
         .catch(error => console.log('error', error));
       window.location.reload();
-      console.log(news);
     }
   };
   return (
@@ -113,28 +119,66 @@ export default function NewsPage () {
               marginTop: '100px'
             }}
         >
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} md={12} lg={12}>
+                            <Toolbar className= "toolbarFlex">
+                                    <h1 className="headerList" color='red'>Banner</h1>
+           <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          value={status}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>ALL STATUS</em>
+          </MenuItem>
+          <MenuItem>NEW</MenuItem>
+          <MenuItem>ACTIVED</MenuItem>
+          <MenuItem>EXPIRED</MenuItem>
+        </Select>
+      </FormControl>
+      <Button style={{
+        marginTop: '20px',
+        marginLeft: '20px',
+        // padding: '18px 36px',
+        fontSize: '15px'
+      }}
+      variant="contained" color="success" onClick={togglePopup}>
+        Thêm banner
+      </Button>
+      {isPopupOpen && <CreateBanner onClose={togglePopup} />}
+      </Toolbar>
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                     <TableContainer sx={{ maxHeight: 440 }}>
                                         <Table stickyHeader aria-label="sticky table">
                                             <TableHead>
                                                 <TableRow>
-                                              <StyledTableCell>Tiêu đề bài đăng</StyledTableCell>
-                                              <StyledTableCell>Mô tả ngắn</StyledTableCell>
+                                              <StyledTableCell>Tiêu đề Banner</StyledTableCell>
+                                              <StyledTableCell>Link</StyledTableCell>
                                                <StyledTableCell>Người đăng</StyledTableCell>
                                                <StyledTableCell>Thời gian đăng</StyledTableCell>
+                                               <StyledTableCell>Mô tả ngắn</StyledTableCell>
+                                               <StyledTableCell>Trạng thái</StyledTableCell>
                                                <StyledTableCell>Thao tác</StyledTableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                            {news != null && news.map((a) => (
+                                            {banner != null && banner.map((a) => (
                                                     <TableRow key = {a.id} >
-                                                        <TableCell>{a.newsTitle}</TableCell>
+                                                        <TableCell>{a.bannerTitle}</TableCell>
+                                                        <TableCell>{a.bannerImageUrl}</TableCell>
+                                                        <TableCell>{a.createdBy}</TableCell>
+                                                        <TableCell>{a.createdTime}</TableCell>
                                                         <TableCell>{a.shortDescription}</TableCell>
-                                                        <TableCell>{a.createdBy} </TableCell>
-                                                        <TableCell>{a.createdTime} </TableCell>
+                                                        <TableCell>{a.status}</TableCell>
                                                         <TableCell>
-                                                            <DeleteIcon className='deleteIcon' onClick={() => handleDeleteNews(a.id)} />
-                                                            <EditIcon className='editIcon' onClick={() => handleEditNews(a)} />
+                                                            <DeleteIcon className='deleteIcon' onClick={() => handleDeleteBanner(a.id)}/>
+                                                            <EditIcon className='editIcon' />
+                                                            {/* <EditIcon className='editIcon' onClick={() => handleSelectAPIEdit(a)} />
+                                                            <InfoIcon className='infoIcon' onClick={() => handleSelectAPI(a)} /> */}
                                                         </TableCell>
                                                     </TableRow>
                                             ))}
@@ -145,6 +189,9 @@ export default function NewsPage () {
                                         </Table>
                                     </TableContainer>
                                 </Paper>
+                                </Grid>
+                        </Grid>
+                    </Container>
            </Box>
             </Box>
         </ThemeProvider>
