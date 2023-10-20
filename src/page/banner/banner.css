@@ -1,0 +1,140 @@
+.popupTable{
+    position: relative;
+    background-color:#fff;
+    width: 60%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 10px;
+    max-height: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+    /* margin-top: 100px; ; */
+}
+.apiHeader, .requestHeader-top{
+    font-weight: 550;
+    font-size: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.apiDetail{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.apiBody{
+    color: red;
+}
+.apiRequest{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.apiRequestBody{
+    width: 90%;
+}
+.requestHeader{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px
+}
+.requestHeader-bottom{
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 10px;
+}
+.requestHeader-top{
+    flex: 1;
+}
+.requestHeader-bottom, .requestHeader input{
+    flex: 3;
+}
+.response, .apiRequest input{
+    width: 90%;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #000;
+}
+.apiRequestBody textarea{
+    height: 40px;
+    flex: 3;
+    padding: 5px;
+}
+.responseText{
+    width: 90%;
+    padding: 10px;
+}
+.errorBody{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.tableRow{
+    width: 90%;
+    border-collapse: collapse;
+}
+.errorBody th, .errorBody td{
+    border: 1px solid #000; 
+    text-align: center;
+    padding: 2px;
+}
+.closeAPI{
+    float: right;
+    width: 100px;
+}
+.closeEdit{
+    position: relative;
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25%;
+    margin-bottom: 10px;
+}
+.tableSelectError{
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.errorBodyEdit{
+    width: 90%;
+    min-height: 30px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.pagination{
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 10px 0;
+}
+.paginationIcon{
+    font-size: 1rem !important;
+}
+.active{
+    width: 25px;
+    height:25px;
+    text-align: center;
+    background-color: #25BDBC;
+    color: #fff;
+    border-radius: 50%;
+}
+.responseText{
+    width: 70%;
+    height: 25px;
+    font-size: 16px;
+    resize: none;
+}
+#preview-image{
+    max-width:500px
+}

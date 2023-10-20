@@ -1,47 +1,59 @@
-import React from 'react';
-import { Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, styled } from '@mui/material';
-import { Search } from '@mui/icons-material';
-import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState, useEffect } from 'react';
+import { Button } from '@mui/material';
+import './banner.css';
+import { uploadFileS3 } from './uploadFileS3';
+
 export default function CreateBanner ({ onClose }) {
   const [bannerTitle, setBannerTitle] = React.useState();
   const [shortDescription, setShortDescription] = React.useState();
   const [bannerImageUrl, setBannerUrl] = React.useState();
-  const [status, setStatus] = React.useState();
+  const [selectStatus, setSelectStatus] = React.useState(1);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileDataURL, setFileDataURL] = useState(null);
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
   const handleInputChangeTitle = (e) => {
     setBannerTitle(e.target.value);
   };
   const handleInputChangeDes = (e) => {
     setShortDescription(e.target.value);
   };
-  const handleInputChangeUrl = (e) => {
-    setBannerUrl(e.target.value);
-  };
   const handleInputChangeStatus = (e) => {
-    setStatus(e.target.value);
+    setSelectStatus(e.target.value);
   };
-  const handleCreateBanner = () => {
+  const handleCreateBanner = async () => {
+    if (!selectedFile) {
+      alert('Please first select a file');
+      return;
+    }
+    const imageUrl = await uploadFileS3(selectedFile);
+    console.log(imageUrl);
+    if (!imageUrl) {
+      alert('Cannot upload file image');
+    }
+    // create banner
+
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-    const raw = JSON.stringify(
+    const raw =
       {
         body: {
-          bannerTitle,
+          bannerImageUrl: imageUrl,
           shortDescription,
-          bannerImageUrl,
-          status
+          bannerTitle,
+          status: selectStatus
         }
-      }
-    );
+      };
     const requestOptions = {
       method: 'POST',
       headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
+      body: JSON.stringify(raw)
     };
-    console.log(raw);
+    console.log('json raw', JSON.stringify(raw));
+    console.log('dsds', raw);
+    console.log('abc', requestOptions);
     fetch('http://localhost:8081/api/admin/banner/create-banner', requestOptions)
       .then(response => response.json())
       .then(result => { })
@@ -50,102 +62,59 @@ export default function CreateBanner ({ onClose }) {
     alert('Tạo banner thành công');
     window.location.reload();
   };
+  useEffect(() => {
+    let fileReader; let isCancel = false;
+    if (selectedFile) {
+      fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const { result } = e.target;
+        if (result && !isCancel) {
+          setFileDataURL(result);
+        }
+      };
+      fileReader.readAsDataURL(selectedFile);
+    }
+    return () => {
+      isCancel = true;
+      if (fileReader && fileReader.readyState === 1) {
+        fileReader.abort();
+      }
+    };
+  }, [selectedFile]);
   return (
     <div className="popupTable">
     <div className="popupTable-content">
         <div className="popupTable-header">
             Create API
         </div>
-        {/* <div className="popupTable-center">
             <div className="apiRequest">
-                <div className="apiHeader">API Url:</div>
-                <input type="text" value={url} onChange={handleInputUrl} />
-            </div> */}
-            {/* <div className="apiRequest">
-                <div className="apiHeader">Request:</div>
-                <div className="apiRequestBody">
-                    <div className="requestHeader">
-                        <div className="requestHeader-top">RequestHeader:</div>
-                        <textarea cols="15" rows="5" value={requestHeader} onChange={handleInputRequestHeaders}></textarea>
-                    </div>
-                    <div className="requestHeader">
-                        <div className="requestHeader-top">RequestBody:</div>
-                        <textarea cols="15" rows="5" value={requestBody} onChange={handleInoutRequestBody}></textarea>
-                    </div>
-                </div>
-            </div> */}
-            <div className="apiRequest">
-                <div className="apiHeader">Response:</div>
-                <textarea name="" id="" cols="20" rows="7" className="responseText"></textarea>
+                <div className="apiHeader">Tiêu đề banner :</div>
+                <input type="email" className="responseText" id="title" placeholder="" value = {bannerTitle} onChange={handleInputChangeTitle}></input>
             </div>
             <div className="apiRequest">
-                <Search>
-                    <IconButton>
-                        <SearchIcon />
-                    </IconButton>
-                    <InputBase
-                        placeholder="Search..."
-                        // value={searchText}
-                        // onChange={handleSearchChange}
-                    />
-                </Search>
-                <div className="apiHeader">Error:</div>
-                <div className="errorBodyEdit">
-                    <Paper className="tableSelectError">
-                        <TableContainer>
-                            <Table aria-label="simple table" >
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell></TableCell>
-                                        <TableCell>ErrorCode</TableCell>
-                                        <TableCell>ErrorName</TableCell>
-                                        <TableCell>ErrorDescription</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {/* {searchText != null ? (
-                                        filteredError != null && filteredError.map((error) => (
-                                            <TableRow key={error.errorId}>
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        color="primary"
-                                                        checked={checkboxState[error.errorId] || false}
-                                                        onChange={(event) => handleCheckboxChange(event, error.errorId)}
-                                                    />
-                                                </TableCell>
-                                                <TableCell>{error.errorCode}</TableCell>
-                                                <TableCell>{error.errorName}</TableCell>
-                                                <TableCell>{error.errorDescription}</TableCell>
-                                            </TableRow>
-                                        ))
-                                    ) : (
-                                        errorAll != null && errorAll.listError.map((error) => (
-                                            <TableRow key={error.errorId}>
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        color="primary"
-                                                        checked={checkboxState[error.errorId] || false}
-                                                        onChange={(event) => handleCheckboxChange(event, error.errorId)}
-                                                    />
-                                                </TableCell>
-                                                <TableCell>{error.errorCode}</TableCell>
-                                                <TableCell>{error.errorName}</TableCell>
-                                                <TableCell>{error.errorDescription}</TableCell>
-                                            </TableRow>
-                                        ))
-                                    )} */}
+                <div className="apiHeader">Mô tả ngắn :</div>
+                <input type="email" className="responseText" id="title" placeholder="" value = {shortDescription} onChange={handleInputChangeDes}></input>
+            </div>
+            <div className="apiRequest">
+                  <label className='apiHeader'>Trạng thái:</label>
+                  <select id="selectStatus" className = "select" value={selectStatus} onChange={handleInputChangeStatus}>
+                  <option value="ALLSTATUS">ALL STATUS</option>
+                  <option value="NEW">NEW</option>
+                  <option value="ACTIVED">ACTIVED</option>
+                  <option value="EXPIRED">EXPIRED</option>
+                </select>
+               </div>
+               <div className='apiRequest'>
+      <h2 className='apiHeader'>Upload ảnh banner :</h2>
+      <input type="file" onChange={handleFileChange} value = {bannerImageUrl} />
+      {selectedFile && <img id="preview-image" src={fileDataURL} alt="example image"></img> }
+   </div>
 
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
-                </div>
-            </div>
         </div>
         <div className="closeEdit">
-            <Button variant="contained">Create</Button>
+            <Button variant="contained" onClick={handleCreateBanner}>Create</Button>
             <Button variant="contained" onClick={onClose}>Close</Button>
         </div>
     </div>
   );
-}
+};

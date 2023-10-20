@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Sidebar from '../../components/sidebar/Sidebar';
-import { Box, Button, Container, Toolbar, CssBaseline, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Button, Modal, Container, Typography, Toolbar, CssBaseline, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import Header from '../../components/header/Header';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -106,6 +106,7 @@ export default function Banner () {
         <CssBaseline />
         <Header toggleDrawer={toggleDrawer} open={open} />
         <Sidebar toggleDrawer={toggleDrawer} open={open} />
+
         <Box
             component="main"
             sx={{
@@ -123,7 +124,6 @@ export default function Banner () {
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={12} lg={12}>
                             <Toolbar className= "toolbarFlex">
-                                    <h1 className="headerList" color='red'>Banner</h1>
            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
         <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
         <Select
@@ -143,13 +143,18 @@ export default function Banner () {
       <Button style={{
         marginTop: '20px',
         marginLeft: '20px',
-        // padding: '18px 36px',
         fontSize: '15px'
       }}
       variant="contained" color="success" onClick={togglePopup}>
         Thêm banner
       </Button>
-      {isPopupOpen && <CreateBanner onClose={togglePopup} />}
+      {isPopupOpen && <Modal
+  open={open}
+  onClose={ () => setOpen(false)}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description">
+ <CreateBanner onClose={togglePopup}/>
+</Modal>}
       </Toolbar>
           <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                     <TableContainer sx={{ maxHeight: 440 }}>
