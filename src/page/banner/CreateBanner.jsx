@@ -51,9 +51,6 @@ export default function CreateBanner ({ onClose }) {
       headers: myHeaders,
       body: JSON.stringify(raw)
     };
-    console.log('json raw', JSON.stringify(raw));
-    console.log('dsds', raw);
-    console.log('abc', requestOptions);
     fetch('http://localhost:8081/api/admin/banner/create-banner', requestOptions)
       .then(response => response.json())
       .then(result => { })
@@ -87,16 +84,16 @@ export default function CreateBanner ({ onClose }) {
         <div className="popupTable-header">
             Create API
         </div>
-            <div className="apiRequest">
-                <div className="apiHeader">Tiêu đề banner :</div>
+            <div className="bannerRequest">
+                <div className="bannerHeader">Tiêu đề banner :</div>
                 <input type="email" className="responseText" id="title" placeholder="" value = {bannerTitle} onChange={handleInputChangeTitle}></input>
             </div>
-            <div className="apiRequest">
-                <div className="apiHeader">Mô tả ngắn :</div>
+            <div className="bannerRequest">
+                <div className="bannerHeader">Mô tả ngắn :</div>
                 <input type="email" className="responseText" id="title" placeholder="" value = {shortDescription} onChange={handleInputChangeDes}></input>
             </div>
-            <div className="apiRequest">
-                  <label className='apiHeader'>Trạng thái:</label>
+            <div className="bannerRequest">
+                  <label className='bannerHeader'>Trạng thái:</label>
                   <select id="selectStatus" className = "select" value={selectStatus} onChange={handleInputChangeStatus}>
                   <option value="ALLSTATUS">ALL STATUS</option>
                   <option value="NEW">NEW</option>
@@ -104,14 +101,14 @@ export default function CreateBanner ({ onClose }) {
                   <option value="EXPIRED">EXPIRED</option>
                 </select>
                </div>
-               <div className='apiRequest'>
-      <h2 className='apiHeader'>Upload ảnh banner :</h2>
+               <div className='bannerRequest'>
+      <h2 className='bannerHeader'>Upload ảnh banner :</h2>
       <input type="file" onChange={handleFileChange} value = {bannerImageUrl} />
       {selectedFile && <img id="preview-image" src={fileDataURL} alt="example image"></img> }
    </div>
 
         </div>
-        <div className="closeEdit">
+        <div className="closeCreate">
             <Button variant="contained" onClick={handleCreateBanner}>Create</Button>
             <Button variant="contained" onClick={onClose}>Close</Button>
         </div>

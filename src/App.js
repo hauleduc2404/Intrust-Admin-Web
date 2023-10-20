@@ -5,12 +5,6 @@ import Login from './page/login/Login';
 import NewsPage from './page/news/NewsPage';
 import Banner from './page/banner/Banner';
 
-// const PrivateRoute = ({ component: Component, ...rest }) => (
-//     <Route {...rest} render={(props) => (
-//       sessionStorage.getItem('accessToken') ? <Component {...props} /> : <Navigate to="/"/>
-//     )} />
-// );
-
 function App () {
   return (
     <Router>

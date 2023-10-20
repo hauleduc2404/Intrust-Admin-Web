@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Sidebar from '../../components/sidebar/Sidebar';
-import { Box, Button, Modal, Container, Typography, Toolbar, CssBaseline, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Button, Modal, Container, Toolbar, CssBaseline, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import Header from '../../components/header/Header';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -27,56 +27,31 @@ export default function Banner () {
 
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [banner, setBanner] = React.useState();
-  const [isPopupOpenInfo, setIsPopupOpenInfo] = React.useState(false);
-  const [selectAPI, setSelectAPI] = React.useState();
-  const handleSelectAPI = (a) => {
-    openInfo();
-    setSelectAPI(a);
-  };
-  const openInfo = () => {
-    setIsPopupOpenInfo(true);
-  };
-  const closeInfo = () => {
-    setIsPopupOpenInfo(false);
-  };
+  const [status, setStatus] = React.useState('');
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
-  };
-  const [isPopupEdit, setIsPopupEdit] = React.useState(false);
-  const handleOpenPopupEdit = () => {
-    setIsPopupEdit(true);
-  };
-  const handleSelectAPIEdit = (u) => {
-    handleOpenPopupEdit();
-    setSelectAPI(u);
-  };
-  const handleClosePopupEdit = () => {
-    setIsPopupEdit(false);
-    setSelectAPI();
   };
   const myHeaders = new Headers();
   myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
   const requestOptions = {
-    method: 'POST',
+    method: 'GET',
     redirect: 'follow',
     headers: myHeaders
   };
   useEffect(() => {
-    fetch('http://localhost:8081/api/admin/banner/get-all-banner', requestOptions)
+    fetch(`http://localhost:8081/api/admin/banner/search?status=${status}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setBanner(result.body);
         console.log(result);
       })
       .catch(error => console.log('error', error));
-  }, []);
+  }, [status]);
   console.log(banner);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const [status, setStatus] = React.useState('');
 
   const handleChange = (event) => {
     setStatus(event.target.value);
@@ -132,12 +107,10 @@ export default function Banner () {
           value={status}
           onChange={handleChange}
         >
-          <MenuItem value="">
-            <em>ALL STATUS</em>
-          </MenuItem>
-          <MenuItem>NEW</MenuItem>
-          <MenuItem>ACTIVED</MenuItem>
-          <MenuItem>EXPIRED</MenuItem>
+          <MenuItem value = "ALLSTATUS">ALL STATUS</MenuItem>
+          <MenuItem value = "NEW">NEW</MenuItem>
+          <MenuItem value = "ACTIVED">ACTIVED</MenuItem>
+          <MenuItem value = "EXPIRED">EXPIRED</MenuItem>
         </Select>
       </FormControl>
       <Button style={{
@@ -182,14 +155,9 @@ export default function Banner () {
                                                         <TableCell>
                                                             <DeleteIcon className='deleteIcon' onClick={() => handleDeleteBanner(a.id)}/>
                                                             <EditIcon className='editIcon' />
-                                                            {/* <EditIcon className='editIcon' onClick={() => handleSelectAPIEdit(a)} />
-                                                            <InfoIcon className='infoIcon' onClick={() => handleSelectAPI(a)} /> */}
                                                         </TableCell>
                                                     </TableRow>
                                             ))}
-
-                                                {/* {selectAPI && isPopupOpenInfo && <ShowAPIInfo id={selectAPI.apiId} onClose={closeInfo} />}
-                                                {selectAPI && isPopupEdit && <EditAPI id={selectAPI.apiId} onClose={handleClosePopupEdit} currentAPI={selectAPI} />} */}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>

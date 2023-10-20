@@ -10,58 +10,28 @@
     max-height: 100%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     overflow-y: auto;
-    /* margin-top: 100px; ; */
 }
-.apiHeader, .requestHeader-top{
+.bannerHeader, .requestHeader-top{
     font-weight: 550;
     font-size: 20px;
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
 }
-.apiDetail{
-    width: 90%;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.apiBody{
-    color: red;
-}
-.apiRequest{
+.bannerRequest{
     width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
 }
-.apiRequestBody{
-    width: 90%;
-}
-.requestHeader{
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 10px
-}
-.requestHeader-bottom{
-    border: 1px solid #000;
-    border-radius: 5px;
-    padding: 10px;
-}
-.requestHeader-top{
-    flex: 1;
-}
-.requestHeader-bottom, .requestHeader input{
-    flex: 3;
-}
-.response, .apiRequest input{
+.response, .bannerRequest input{
     width: 90%;
     border-radius: 5px;
     padding: 10px;
     border: 1px solid #000;
 }
-.apiRequestBody textarea{
+.textarea{
     height: 40px;
     flex: 3;
     padding: 5px;
@@ -70,12 +40,7 @@
     width: 90%;
     padding: 10px;
 }
-.errorBody{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+
 .tableRow{
     width: 90%;
     border-collapse: collapse;
@@ -89,7 +54,7 @@
     float: right;
     width: 100px;
 }
-.closeEdit{
+.closeCreate{
     position: relative;
     width: 50%;
     display: flex;
@@ -101,25 +66,6 @@
     width: 100%;
     margin-top: 10px;
     margin-bottom: 20px;
-}
-.errorBodyEdit{
-    width: 90%;
-    min-height: 30px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-.pagination{
-    display: flex;
-    list-style: none;
-    gap: 20px;
-    width: 90%;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    margin: 10px 0;
-}
-.paginationIcon{
-    font-size: 1rem !important;
 }
 .active{
     width: 25px;

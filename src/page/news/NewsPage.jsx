@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Header from '../../components/header/Header';
-import { Box, Button, Container, Toolbar, CssBaseline, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, CssBaseline, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
@@ -69,7 +69,6 @@ export default function NewsPage () {
       })
       .catch(error => console.log('error', error));
   }, []);
-  // console.log(banner);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -138,9 +137,6 @@ export default function NewsPage () {
                                                         </TableCell>
                                                     </TableRow>
                                             ))}
-
-                                                {/* {selectAPI && isPopupOpenInfo && <ShowAPIInfo id={selectAPI.apiId} onClose={closeInfo} />}
-                                                {selectAPI && isPopupEdit && <EditAPI id={selectAPI.apiId} onClose={handleClosePopupEdit} currentAPI={selectAPI} />} */}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
