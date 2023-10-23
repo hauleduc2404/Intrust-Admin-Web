@@ -12,6 +12,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CreateBanner from './CreateBanner';
+import ShowBannerInfo from './ShowBannerInfo';
+import EditBanner from './EditBanner';
 
 const defaultTheme = createTheme();
 export default function Banner () {
@@ -27,7 +29,33 @@ export default function Banner () {
 
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [banner, setBanner] = React.useState();
-  const [status, setStatus] = React.useState('');
+  const [status, setStatus] = React.useState('ALLSTATUS');
+  const [selectBanner, setSelectBanner] = React.useState();
+  const [isPopupOpenInfo, setIsPopupOpenInfo] = React.useState(false);
+  const [isPopupEdit, setIsPopupEdit] = React.useState(false);
+  const handleOpenPopupEdit = () => {
+    setIsPopupEdit(true);
+  };
+  const handleSelectBannerEdit = (u) => {
+    handleOpenPopupEdit();
+    setSelectBanner(u);
+    console.log('ầdcdcdsc', u.id);
+  };
+  const handleClosePopupEdit = () => {
+    setIsPopupEdit(false);
+    setSelectBanner();
+  };
+  const handleSelectBanner = (a) => {
+    openInfo();
+    setSelectBanner(a);
+    console.log(a.id);
+  };
+  const openInfo = () => {
+    setIsPopupOpenInfo(true);
+  };
+  const closeInfo = () => {
+    setIsPopupOpenInfo(false);
+  };
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
   };
@@ -154,10 +182,13 @@ export default function Banner () {
                                                         <TableCell>{a.status}</TableCell>
                                                         <TableCell>
                                                             <DeleteIcon className='deleteIcon' onClick={() => handleDeleteBanner(a.id)}/>
-                                                            <EditIcon className='editIcon' />
+                                                            <EditIcon className='editIcon' onClick={() => handleSelectBannerEdit(a)}/>
+                                                            <InfoIcon className='infoIcon' onClick={() => handleSelectBanner(a)} />
                                                         </TableCell>
                                                     </TableRow>
                                             ))}
+                                            {selectBanner && isPopupOpenInfo && <ShowBannerInfo id={selectBanner.id} onClose={closeInfo} />}
+                                            {selectBanner && isPopupEdit && <EditBanner id={selectBanner.id} onClose={handleClosePopupEdit} currentBanner={selectBanner} />}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
@@ -169,4 +200,4 @@ export default function Banner () {
             </Box>
         </ThemeProvider>
   );
-}
+};

@@ -12,6 +12,7 @@
     overflow-y: auto;
 }
 .bannerHeader, .requestHeader-top{
+    padding-top: 10px;
     font-weight: 550;
     font-size: 20px;
     margin-bottom: 10px;
@@ -50,7 +51,7 @@
     text-align: center;
     padding: 2px;
 }
-.closeAPI{
+.closeBanner{
     float: right;
     width: 100px;
 }
@@ -84,3 +85,21 @@
 #preview-image{
     max-width:500px
 }
+.bannerBody{
+    color: red;
+}
+.bannerLink{
+    color: red;
+    text-align: center;
+}
+.headerBanner{
+  text-align: center;
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 30px;
+  height: 30px;
+  color:black;
+  letter-spacing: .1em;
+}
+/* .popupTable{
+
+} */
