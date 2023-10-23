@@ -4,10 +4,10 @@ import { Button, Modal } from '@mui/material';
 
 export default function ShowBannerInfo ({ id, onClose }) {
   const [banner, setBanner] = React.useState();
-  const myHeaders = new Headers();
   const [open, setOpen] = React.useState(true);
   const [fileDataURL, setFileDataURL] = useState();
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
+  const myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
   myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
   const requestOptions = {
@@ -45,6 +45,10 @@ export default function ShowBannerInfo ({ id, onClose }) {
                <div className="bannerRequest">
                    <div className="bannerHeader">Link banner :</div>
                    <div className='bannerLink'>{banner.bannerImageUrl}</div>
+               </div>
+               <div className="bannerRequest">
+                   <div className="bannerHeader">Ảnh banner :</div>
+                   <img id="preview-image" src={banner.bannerImageUrl} alt="example image"></img>
                </div>
                <div className="bannerRequest">
                    <div className="bannerHeader">Người đăng :</div>

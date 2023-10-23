@@ -11,6 +11,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     overflow-y: auto;
 }
+
 .bannerHeader, .requestHeader-top{
     padding-top: 10px;
     font-weight: 550;
@@ -19,6 +20,7 @@
     display: flex;
     flex-direction: row;
 }
+
 .bannerRequest{
     width: 90%;
     display: flex;
@@ -26,6 +28,7 @@
     align-items: center;
     margin-bottom: 10px;
 }
+
 .response, .bannerRequest input{
     width: 90%;
     border-radius: 5px;
@@ -37,6 +40,7 @@
     flex: 3;
     padding: 5px;
 }
+
 .responseText{
     width: 90%;
     padding: 10px;
@@ -46,11 +50,13 @@
     width: 90%;
     border-collapse: collapse;
 }
+
 .errorBody th, .errorBody td{
     border: 1px solid #000; 
     text-align: center;
     padding: 2px;
 }
+
 .closeBanner{
     float: right;
     width: 100px;
@@ -63,11 +69,13 @@
     margin-left: 25%;
     margin-bottom: 10px;
 }
+
 .tableSelectError{
     width: 100%;
     margin-top: 10px;
     margin-bottom: 20px;
 }
+
 .active{
     width: 25px;
     height:25px;
@@ -76,22 +84,27 @@
     color: #fff;
     border-radius: 50%;
 }
+
 .responseText{
     width: 70%;
     height: 25px;
     font-size: 16px;
     resize: none;
 }
+
 #preview-image{
     max-width:500px
 }
+
 .bannerBody{
     color: red;
 }
+
 .bannerLink{
     color: red;
     text-align: center;
 }
+
 .headerBanner{
   text-align: center;
   font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
@@ -100,6 +113,3 @@
   color:black;
   letter-spacing: .1em;
 }
-/* .popupTable{
-
-} */

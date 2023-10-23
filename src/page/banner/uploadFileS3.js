@@ -24,6 +24,5 @@ export const uploadFileS3 = async (file) => {
   } catch (err) {
     console.log(err);
   }
-  console.log('url:', urlRes);
   return urlRes;
 };

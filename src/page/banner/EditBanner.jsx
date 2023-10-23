@@ -10,27 +10,30 @@ export default function EditBanner ({ id, onClose, currentBanner }) {
   const [selectStatus, setSelectStatus] = React.useState(currentBanner.status);
   const [selectedFile, setSelectedFile] = useState();
   const [fileDataURL, setFileDataURL] = useState(null);
-  const [editedBanner, setEditedBanner] = React.useState({ ...currentBanner });
+
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
+
   const handleInputChangeTitle = (e) => {
     setBannerTitle(e.target.value);
     console.log(bannerTitle);
   };
+
   const handleInputChangeDes = (e) => {
     setShortDescription(e.target.value);
   };
+
   const handleInputChangeStatus = (e) => {
     setSelectStatus(e.target.value);
   };
+
   const handleEditBanner = async () => {
     if (!selectedFile) {
       alert('Please first select a file');
       return;
     }
     const imageUrl = await uploadFileS3(selectedFile);
-    console.log(imageUrl);
     if (!imageUrl) {
       alert('Cannot upload file image');
     }
@@ -60,6 +63,7 @@ export default function EditBanner ({ id, onClose, currentBanner }) {
     alert('Sửa banner thành công');
     window.location.reload();
   };
+
   useEffect(() => {
     let fileReader; let isCancel = false;
     if (selectedFile) {
@@ -79,6 +83,7 @@ export default function EditBanner ({ id, onClose, currentBanner }) {
       }
     };
   }, [selectedFile]);
+
   return (
     <Modal open={open}
         aria-labelledby="modal-modal-title"
