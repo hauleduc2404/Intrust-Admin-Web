@@ -25,21 +25,21 @@ export default function Login () {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
-    const raw = JSON.stringify(
+    var raw = JSON.stringify(
       {
-        body: {
-          username,
-          password
-        }
+          "body": {
+              "username": username,
+              "password": password
+          }
       }
-    );
+  );
     const requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: raw,
       redirect: 'follow'
     };
-    fetch('http://localhost:8081/api/auth/signin', requestOptions)
+    fetch('https://intrustca.vn/api/auth/signin', requestOptions)
       .then(response => response.json())
       .then(result => {
         if (result.responseCode === '200') {

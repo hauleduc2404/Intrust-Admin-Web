@@ -2,9 +2,7 @@ import { IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
 import MuiAppBar from '@mui/material/AppBar';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
-
+import { styled, createTheme } from '@mui/material/styles';
 const drawerWidth = 240;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open'
@@ -23,7 +21,6 @@ const AppBar = styled(MuiAppBar, {
     })
   })
 }));
-const defaultTheme = createTheme();
 export default function Header ({ toggleDrawer, open }) {
   const handleLogout = () => {
     const shouldLogout = window.confirm('Bạn có chắc chắn muốn đăng xuất?');
@@ -62,7 +59,7 @@ export default function Header ({ toggleDrawer, open }) {
                     noWrap
                     sx={{ flexGrow: 1 }}
                 >
-                    Home
+                    Admin Page
                 </Typography>
                 <Typography
                     component="h1"

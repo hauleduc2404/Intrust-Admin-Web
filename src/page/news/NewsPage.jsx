@@ -1,152 +1,140 @@
 import React, { useEffect } from 'react';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import Sidebar from '../../components/sidebar/Sidebar';
-import Header from '../../components/header/Header';
-import { Box, Button, Container, Toolbar, CssBaseline, Grid, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Button, Container, CssBaseline, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ThemeProvider, Toolbar, createTheme } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
+import Header from '../../components/header/Header';
+import Sidebar from '../../components/sidebar/Sidebar';
+import { Link } from 'react-router-dom';
+import "./news.css"
+import EditNews from './EditNews';
 const defaultTheme = createTheme();
-export default function NewsPage () {
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14
-    }
-  }));
-
-  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
-  const [news, setNews] = React.useState();
-  const [isPopupOpenInfo, setIsPopupOpenInfo] = React.useState(false);
-  const [selectAPI, setSelectAPI] = React.useState();
-  const handleSelectAPI = (a) => {
-    openInfo();
-    setSelectAPI(a);
-  };
-  const openInfo = () => {
-    setIsPopupOpenInfo(true);
-  };
-  const closeInfo = () => {
-    setIsPopupOpenInfo(false);
-  };
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
-  };
-  const [isPopupEdit, setIsPopupEdit] = React.useState(false);
-  const handleOpenPopupEdit = () => {
-    setIsPopupEdit(true);
-  };
-  const handleEditNews = (u) => {
-    handleOpenPopupEdit();
-    setSelectAPI(u);
-  };
-  const handleClosePopupEdit = () => {
-    setIsPopupEdit(false);
-    setSelectAPI();
-  };
-  const myHeaders = new Headers();
-  myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-  const requestOptions = {
-    method: 'POST',
-    redirect: 'follow',
-    headers: myHeaders
-  };
-  useEffect(() => {
-    fetch('http://localhost:8081/api/v1/get-all-news', requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        setNews(result.body);
-        console.log(result);
-      })
-      .catch(error => console.log('error', error));
-  }, []);
-  // console.log(banner);
+export default function NewsPage() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const handleDeleteNews = (id) => {
-    const confirmDelete = window.confirm('Bạn chắc chắn muốn xóa tin?');
-    if (confirmDelete) {
-      const myHeaders = new Headers();
-      myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-      const requestOption = {
-        method: 'DELETE',
-        redirect: 'follow',
-        headers: myHeaders
-      };
+  const [news, setNews] = React.useState();
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem('accessToken'));
+  myHeaders.append("Content-Type", "application/json");
+  var raw = JSON.stringify(
+    {
+      "body": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "criteriaRequest": {
 
-      fetch(`http://localhost:8081/api/admin/delete/${id}`, requestOption)
-        .then(response => response.json())
-        .then(result => {
-        })
-        .catch(error => console.log('error', error));
-      window.location.reload();
-      console.log(news);
+        }
+      }
     }
+  );
+  var requestOptions = {
+    method: 'POST',
+    redirect: 'follow',
+    headers: myHeaders,
+    body: raw
   };
+  useEffect(() => {
+    fetch(`https://intrustca.vn/api/v1/get-news`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setNews(result.body.page.content);
+      })
+      .catch(error => console.error('error', error));
+  }, []);
+  const handleDeleteNews = (id) => {
+    var requestOptions = {
+      method: 'DELETE',
+      redirect: 'follow',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+      },
+    };
+    fetch('https://intrustca.vn/api/admin/delete-news/' + id, requestOptions)
+      .then(response => {
+        console.log(response);
+        alert('xóa thành công')
+        window.location.reload();
+      })
+      .catch(error => console.error(error))
+  }
+  const [isPopupEdit, setIsPopupEdit] = React.useState(false);
+  const [selectNews, setSelectNews] = React.useState();
+  const handleOpenPopupEdit = () => {
+    setIsPopupEdit(true);
+  }
+  const handleSelectNews = (u) => {
+    handleOpenPopupEdit();
+    setSelectNews(u);
+  }
+  const handleClosePopupEdit = () => {
+    setIsPopupEdit(false);
+    setSelectNews();
+  }
   return (
     <ThemeProvider theme={defaultTheme}>
-    <Box sx={{ display: 'flex', height: '100vh' }}>
+      <Box sx={{ display: 'flex', height: '100vh' }}>
         <CssBaseline />
         <Header toggleDrawer={toggleDrawer} open={open} />
         <Sidebar toggleDrawer={toggleDrawer} open={open} />
         <Box
-            component="main"
-            sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === 'light'
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-              flexGrow: 1,
-              height: '100vh',
-              overflow: 'auto',
-              marginTop: '100px'
-            }}
+          component="main"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto'
+          }}
         >
-          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                    <TableContainer sx={{ maxHeight: 440 }}>
-                                        <Table stickyHeader aria-label="sticky table">
-                                            <TableHead>
-                                                <TableRow>
-                                              <StyledTableCell>Tiêu đề bài đăng</StyledTableCell>
-                                              <StyledTableCell>Mô tả ngắn</StyledTableCell>
-                                               <StyledTableCell>Người đăng</StyledTableCell>
-                                               <StyledTableCell>Thời gian đăng</StyledTableCell>
-                                               <StyledTableCell>Thao tác</StyledTableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                            {news != null && news.map((a) => (
-                                                    <TableRow key = {a.id} >
-                                                        <TableCell>{a.newsTitle}</TableCell>
-                                                        <TableCell>{a.shortDescription}</TableCell>
-                                                        <TableCell>{a.createdBy} </TableCell>
-                                                        <TableCell>{a.createdTime} </TableCell>
-                                                        <TableCell>
-                                                            <DeleteIcon className='deleteIcon' onClick={() => handleDeleteNews(a.id)} />
-                                                            <EditIcon className='editIcon' onClick={() => handleEditNews(a)} />
-                                                        </TableCell>
-                                                    </TableRow>
-                                            ))}
-
-                                                {/* {selectAPI && isPopupOpenInfo && <ShowAPIInfo id={selectAPI.apiId} onClose={closeInfo} />}
-                                                {selectAPI && isPopupEdit && <EditAPI id={selectAPI.apiId} onClose={handleClosePopupEdit} currentAPI={selectAPI} />} */}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Paper>
-           </Box>
-            </Box>
-        </ThemeProvider>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12} lg={12}>
+                <Toolbar className="toolbarFlex">
+                  <h1 className="headerList">Danh sách các tin tức</h1>
+                  <Link to={'/createNews'}>
+                    <Button variant='contained'>Create News</Button>
+                  </Link>
+                </Toolbar>
+                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                  <TableContainer sx={{ maxHeight: 440 }}>
+                    <Table stickyHeader aria-label="sticky table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Tiêu đề bài đăng</TableCell>
+                          <TableCell>Mô tả ngắn</TableCell>
+                          <TableCell>Người đăng</TableCell>
+                          <TableCell>Thời gian đăng</TableCell>
+                          <TableCell>Thao tác</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {news != null && news.map((n) => (
+                          <TableRow key={n.id}>
+                            <TableCell>{n.newsTitle}</TableCell>
+                            <TableCell>{n.shortDescription}</TableCell>
+                            <TableCell>{n.createdBy}</TableCell>
+                            <TableCell>{n.createdTime}</TableCell>
+                            <TableCell>
+                              <DeleteIcon className='deleteIcon' onClick={() => handleDeleteNews(n.id)} />
+                              <EditIcon className='editIcon' onClick={() => handleSelectNews(n)} />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                        {selectNews && isPopupEdit && <EditNews id={selectNews.id} onClose={handleClosePopupEdit} />}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
