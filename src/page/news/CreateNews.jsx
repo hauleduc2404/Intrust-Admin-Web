@@ -108,7 +108,8 @@ export default function CreateNews() {
             fetch('https://intrustca.vn/api/admin/create-news', requestOptions)
                 .then((response) => response.json())
                 .then(data => {
-                    alert('Tạp mới tin tức thành công')
+                    alert('Tạp mới tin tức thành công');
+                    window.location.reload();
                 })
                 .catch((err) => console.error(err))
         }

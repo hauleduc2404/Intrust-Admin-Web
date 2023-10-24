@@ -125,3 +125,24 @@
 .logout:hover{
   color: red;
 }
+.pagination{
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  width: 90%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 10px 0;
+}
+.paginationIcon{
+  font-size: 1rem !important;
+}
+.active{
+  width: 25px;
+  height:25px;
+  text-align: center;
+  background-color: #25BDBC;
+  color: #fff;
+  border-radius: 50%;
+}

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Box, Button, Container, CssBaseline, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ThemeProvider, Toolbar, createTheme } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import InfoIcon from '@mui/icons-material/Info';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Header from '../../components/header/Header';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { Link } from 'react-router-dom';
@@ -16,6 +17,10 @@ export default function NewsPage() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [currentPage, setCurrentPage] = React.useState(0);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   const [news, setNews] = React.useState();
   var myHeaders = new Headers();
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem('accessToken'));
@@ -23,8 +28,8 @@ export default function NewsPage() {
   var raw = JSON.stringify(
     {
       "body": {
-        "pageNumber": 0,
-        "pageSize": 10,
+        "pageNumber": currentPage,
+        "pageSize": 5,
         "criteriaRequest": {
 
         }
@@ -41,10 +46,10 @@ export default function NewsPage() {
     fetch(`https://intrustca.vn/api/v1/get-news`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        setNews(result.body.page.content);
+        setNews(result.body.page);
       })
       .catch(error => console.error('error', error));
-  }, []);
+  }, [currentPage]);
   const handleDeleteNews = (id) => {
     var requestOptions = {
       method: 'DELETE',
@@ -74,7 +79,7 @@ export default function NewsPage() {
     setIsPopupEdit(false);
     setSelectNews();
   }
-  if(isLoggedIn){
+  if (isLoggedIn) {
     return (
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: 'flex', height: '100vh' }}>
@@ -115,7 +120,7 @@ export default function NewsPage() {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {news != null && news.map((n) => (
+                          {news != null && news.content.map((n) => (
                             <TableRow key={n.id}>
                               <TableCell>{n.newsTitle}</TableCell>
                               <TableCell>{n.shortDescription}</TableCell>
@@ -132,6 +137,16 @@ export default function NewsPage() {
                       </Table>
                     </TableContainer>
                   </Paper>
+                  {news != null && <div className="pagination">
+                    {currentPage > 0 && <div onClick={() => handlePageChange(currentPage - 1)}><ArrowBackIosIcon className="paginationIcon" /></div>}
+                    {Array.from({ length: news.totalPages }).map((_, index) => (
+                      <div onClick={() => handlePageChange(index + 1)} className={currentPage === index? "active" : ""} >
+                        {index + 1}
+                      </div>
+                    ))}
+                    {currentPage <  news.totalPages - 1 && <div onClick={() => handlePageChange(currentPage + 1)}><ArrowForwardIosIcon className="paginationIcon" /></div>}
+
+                  </div>}
                 </Grid>
               </Grid>
             </Container>
@@ -139,7 +154,7 @@ export default function NewsPage() {
         </Box>
       </ThemeProvider>
     );
-  }else{
+  } else {
     return <Login />
   }
 }
