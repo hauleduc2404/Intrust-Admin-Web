@@ -1,4 +1,8 @@
 import React, { useEffect } from 'react';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import Sidebar from '../../components/sidebar/Sidebar';
+import Header from '../../components/header/Header';
+import { Box, CssBaseline, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Box, Button, Container, CssBaseline, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, ThemeProvider, Toolbar, createTheme } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -91,48 +95,35 @@ export default function NewsPage() {
             overflow: 'auto'
           }}
         >
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={12} lg={12}>
-                <Toolbar className="toolbarFlex">
-                  <h1 className="headerList">Danh sách các tin tức</h1>
-                  <Link to={'/createNews'}>
-                    <Button variant='contained'>Create News</Button>
-                  </Link>
-                </Toolbar>
-                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                  <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Tiêu đề bài đăng</TableCell>
-                          <TableCell>Mô tả ngắn</TableCell>
-                          <TableCell>Người đăng</TableCell>
-                          <TableCell>Thời gian đăng</TableCell>
-                          <TableCell>Thao tác</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {news != null && news.map((n) => (
-                          <TableRow key={n.id}>
-                            <TableCell>{n.newsTitle}</TableCell>
-                            <TableCell>{n.shortDescription}</TableCell>
-                            <TableCell>{n.createdBy}</TableCell>
-                            <TableCell>{n.createdTime}</TableCell>
-                            <TableCell>
-                              <DeleteIcon className='deleteIcon' onClick={() => handleDeleteNews(n.id)} />
-                              <EditIcon className='editIcon' onClick={() => handleSelectNews(n)} />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                        {selectNews && isPopupEdit && <EditNews id={selectNews.id} onClose={handleClosePopupEdit} />}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Paper>
-              </Grid>
-            </Grid>
-          </Container>
+          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Tiêu đề bài đăng</StyledTableCell>
+                    <StyledTableCell>Mô tả ngắn</StyledTableCell>
+                    <StyledTableCell>Người đăng</StyledTableCell>
+                    <StyledTableCell>Thời gian đăng</StyledTableCell>
+                    <StyledTableCell>Thao tác</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {news != null && news.map((a) => (
+                    <TableRow key={a.id} >
+                      <TableCell>{a.newsTitle}</TableCell>
+                      <TableCell>{a.shortDescription}</TableCell>
+                      <TableCell>{a.createdBy} </TableCell>
+                      <TableCell>{a.createdTime} </TableCell>
+                      <TableCell>
+                        <DeleteIcon className='deleteIcon' onClick={() => handleDeleteNews(a.id)} />
+                        <EditIcon className='editIcon' onClick={() => handleEditNews(a)} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         </Box>
       </Box>
     </ThemeProvider>
