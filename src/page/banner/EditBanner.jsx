@@ -17,7 +17,6 @@ export default function EditBanner ({ id, onClose, currentBanner }) {
 
   const handleInputChangeTitle = (e) => {
     setBannerTitle(e.target.value);
-    console.log(bannerTitle);
   };
 
   const handleInputChangeDes = (e) => {
@@ -55,7 +54,7 @@ export default function EditBanner ({ id, onClose, currentBanner }) {
       headers: myHeaders,
       body: JSON.stringify(raw)
     };
-    fetch('http://localhost:8081/api/admin/banner/update-banner', requestOptions)
+    fetch('https://intrustca.vn/api/admin/banner/update-banner', requestOptions)
       .then(response => response.json())
       .then(result => { })
       .catch(error => console.log('error', error));

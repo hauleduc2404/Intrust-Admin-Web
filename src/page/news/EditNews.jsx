@@ -37,7 +37,6 @@ export default function EditNews({ onClose, id }) {
         fetch(`https://intrustca.vn/api/admin/get-news/${id}`, requestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data.body);
                 setTitle(data.body.newsTitle);
                 setShortDescription(data.body.shortDescription);
                 setThumb(data.body.thumbUrl);
@@ -77,7 +76,6 @@ export default function EditNews({ onClose, id }) {
                 },
             }
         }
-        console.log(data)
         var requestOptions = {
             method: 'PUT',
             body: JSON.stringify(data),
@@ -90,8 +88,6 @@ export default function EditNews({ onClose, id }) {
         fetch('https://intrustca.vn/api/admin/update-news', requestOptions)
             .then((response) => response.json())
             .then(data => {
-                console.log(data)
-                console.log('Cập nhật tin tức thành công')
             })
             .catch((err) => console.error(err))
     }

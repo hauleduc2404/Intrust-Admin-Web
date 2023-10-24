@@ -14,9 +14,11 @@ import Select from '@mui/material/Select';
 import CreateBanner from './CreateBanner';
 import ShowBannerInfo from './ShowBannerInfo';
 import EditBanner from './EditBanner';
+import Login from '../login/Login';
 
 const defaultTheme = createTheme();
-export default function Banner () {
+export default function Banner() {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(localStorage.getItem('accessToken') != null);
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -39,7 +41,6 @@ export default function Banner () {
   const handleSelectBannerEdit = (u) => {
     handleOpenPopupEdit();
     setSelectBanner(u);
-    console.log('ầdcdcdsc', u.id);
   };
   const handleClosePopupEdit = () => {
     setIsPopupEdit(false);
@@ -48,7 +49,6 @@ export default function Banner () {
   const handleSelectBanner = (a) => {
     openInfo();
     setSelectBanner(a);
-    console.log(a.id);
   };
   const openInfo = () => {
     setIsPopupOpenInfo(true);
@@ -67,15 +67,13 @@ export default function Banner () {
     headers: myHeaders
   };
   useEffect(() => {
-    fetch(`http://localhost:8081/api/admin/banner/search?status=${status}`, requestOptions)
+    fetch(`https://intrustca.vn/api/admin/banner/search?status=${status}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setBanner(result.body);
-        console.log(result);
       })
       .catch(error => console.log('error', error));
   }, [status]);
-  console.log(banner);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -95,7 +93,7 @@ export default function Banner () {
         headers: myHeaders
       };
 
-      fetch(`http://localhost:8081/api/admin/banner/delete-banner/${id}`, requestOption)
+      fetch(`https://intrustca.vn/api/admin/banner/delete-banner/${id}`, requestOption)
         .then(response => response.json())
         .then(result => {
         })
@@ -103,14 +101,15 @@ export default function Banner () {
       window.location.reload();
     }
   };
-  return (
-    <ThemeProvider theme={defaultTheme}>
-    <Box sx={{ display: 'flex', height: '100vh' }}>
-        <CssBaseline />
-        <Header toggleDrawer={toggleDrawer} open={open} />
-        <Sidebar toggleDrawer={toggleDrawer} open={open} />
+  if (isLoggedIn) {
+    return (
+      <ThemeProvider theme={defaultTheme}>
+        <Box sx={{ display: 'flex', height: '100vh' }}>
+          <CssBaseline />
+          <Header toggleDrawer={toggleDrawer} open={open} />
+          <Sidebar toggleDrawer={toggleDrawer} open={open} />
 
-        <Box
+          <Box
             component="main"
             sx={{
               backgroundColor: (theme) =>
@@ -119,85 +118,81 @@ export default function Banner () {
                   : theme.palette.grey[900],
               flexGrow: 1,
               height: '100vh',
-              overflow: 'auto',
-              marginTop: '100px'
+              overflow: 'auto'
             }}
-        >
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} md={12} lg={12}>
-                            <Toolbar className= "toolbarFlex">
-           <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
-        <Select
-          labelId="demo-simple-select-filled-label"
-          id="demo-simple-select-filled"
-          value={status}
-          onChange={handleChange}
-        >
-          <MenuItem value = "ALLSTATUS">ALL STATUS</MenuItem>
-          <MenuItem value = "NEW">NEW</MenuItem>
-          <MenuItem value = "ACTIVED">ACTIVED</MenuItem>
-          <MenuItem value = "EXPIRED">EXPIRED</MenuItem>
-        </Select>
-      </FormControl>
-      <Button style={{
-        marginTop: '20px',
-        marginLeft: '20px',
-        fontSize: '15px'
-      }}
-      variant="contained" color="success" onClick={togglePopup}>
-        Thêm banner
-      </Button>
-      {isPopupOpen && <Modal
-  open={open}
-  onClose={ () => setOpen(false)}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description">
- <CreateBanner onClose={togglePopup}/>
-</Modal>}
-      </Toolbar>
-          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                    <TableContainer sx={{ maxHeight: 440 }}>
-                                        <Table stickyHeader aria-label="sticky table">
-                                            <TableHead>
-                                                <TableRow>
-                                              <StyledTableCell>Tiêu đề Banner</StyledTableCell>
-                                              <StyledTableCell>Link</StyledTableCell>
-                                               <StyledTableCell>Người đăng</StyledTableCell>
-                                               <StyledTableCell>Thời gian đăng</StyledTableCell>
-                                               <StyledTableCell>Mô tả ngắn</StyledTableCell>
-                                               <StyledTableCell>Trạng thái</StyledTableCell>
-                                               <StyledTableCell>Thao tác</StyledTableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                            {banner != null && banner.map((a) => (
-                                                    <TableRow key = {a.id} >
-                                                        <TableCell>{a.bannerTitle}</TableCell>
-                                                        <TableCell>{a.bannerImageUrl}</TableCell>
-                                                        <TableCell>{a.createdBy}</TableCell>
-                                                        <TableCell>{a.createdTime}</TableCell>
-                                                        <TableCell>{a.shortDescription}</TableCell>
-                                                        <TableCell>{a.status}</TableCell>
-                                                        <TableCell>
-                                                            <DeleteIcon className='deleteIcon' onClick={() => handleDeleteBanner(a.id)}/>
-                                                            <EditIcon className='editIcon' onClick={() => handleSelectBannerEdit(a)}/>
-                                                            <InfoIcon className='infoIcon' onClick={() => handleSelectBanner(a)} />
-                                                        </TableCell>
-                                                    </TableRow>
-                                            ))}
-                                            {selectBanner && isPopupOpenInfo && <ShowBannerInfo id={selectBanner.id} onClose={closeInfo} />}
-                                            {selectBanner && isPopupEdit && <EditBanner id={selectBanner.id} onClose={handleClosePopupEdit} currentBanner={selectBanner} />}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Paper>
-                                </Grid>
-                        </Grid>
-                    </Container>
-           </Box>
-            </Box>
-        </ThemeProvider>
-  );
+          >
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={12} lg={12}>
+                  <Toolbar className="toolbarFlex">
+                    <h1 className="headerList">Danh sách banner</h1>
+                    <FormControl variant="filled" sx={{ m: 1, minWidth: 120, marginTop: 5, marginBottom: 5 }}>
+                      <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-filled-label"
+                        id="demo-simple-select-filled"
+                        value={status}
+                        onChange={handleChange}
+                      >
+                        <MenuItem value="ALLSTATUS">ALL STATUS</MenuItem>
+                        <MenuItem value="NEW">NEW</MenuItem>
+                        <MenuItem value="ACTIVED">ACTIVED</MenuItem>
+                        <MenuItem value="EXPIRED">EXPIRED</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <Button variant="contained" onClick={togglePopup}>Thêm banner</Button>
+                    {isPopupOpen && <Modal
+                      open={open}
+                      onClose={() => setOpen(false)}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description">
+                      <CreateBanner onClose={togglePopup} />
+                    </Modal>}
+                  </Toolbar>
+                  <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                      <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                          <TableRow>
+                            <StyledTableCell>Tiêu đề Banner</StyledTableCell>
+                            <StyledTableCell>Link</StyledTableCell>
+                            <StyledTableCell>Người đăng</StyledTableCell>
+                            <StyledTableCell>Thời gian đăng</StyledTableCell>
+                            <StyledTableCell>Mô tả ngắn</StyledTableCell>
+                            <StyledTableCell>Trạng thái</StyledTableCell>
+                            <StyledTableCell>Thao tác</StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {banner != null && banner.map((a) => (
+                            <TableRow key={a.id} >
+                              <TableCell>{a.bannerTitle}</TableCell>
+                              <TableCell>{a.bannerImageUrl}</TableCell>
+                              <TableCell>{a.createdBy}</TableCell>
+                              <TableCell>{a.createdTime}</TableCell>
+                              <TableCell>{a.shortDescription}</TableCell>
+                              <TableCell>{a.status}</TableCell>
+                              <TableCell>
+                                <DeleteIcon className='deleteIcon' onClick={() => handleDeleteBanner(a.id)} />
+                                <EditIcon className='editIcon' onClick={() => handleSelectBannerEdit(a)} />
+                                <InfoIcon className='infoIcon' onClick={() => handleSelectBanner(a)} />
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                          {selectBanner && isPopupOpenInfo && <ShowBannerInfo id={selectBanner.id} onClose={closeInfo} />}
+                          {selectBanner && isPopupEdit && <EditBanner id={selectBanner.id} onClose={handleClosePopupEdit} currentBanner={selectBanner} />}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Container>
+          </Box>
+        </Box>
+      </ThemeProvider>
+    );
+  } else {
+    return <Login />;
+  }
 };

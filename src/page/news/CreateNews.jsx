@@ -5,10 +5,12 @@ import React, { useEffect } from 'react';
 import "./news.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Login from '../login/Login';
 
 const defaultTheme = createTheme();
 
 export default function CreateNews() {
+    const [isLoggedIn, setIsLoggedIn] = React.useState(localStorage.getItem('accessToken') != null);
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -101,7 +103,7 @@ export default function CreateNews() {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                  },
+                },
             };
             fetch('https://intrustca.vn/api/admin/create-news', requestOptions)
                 .then((response) => response.json())
@@ -111,70 +113,72 @@ export default function CreateNews() {
                 .catch((err) => console.error(err))
         }
     }
-    return (
-        <ThemeProvider theme={defaultTheme}>
-            <Box sx={{ display: 'flex', height: '100vh' }}>
-                <CssBaseline />
-                <Header toggleDrawer={toggleDrawer} open={open} />
-                <Sidebar toggleDrawer={toggleDrawer} open={open} />
-                <Box
-                    component="main"
-                    sx={{
-                        backgroundColor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.grey[100]
-                                : theme.palette.grey[900],
-                        flexGrow: 1,
-                        height: '100vh',
-                        overflow: 'auto'
-                    }}
-                >
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} md={12} lg={12} sx={{ overflow: 'auto' }}>
-                                <Toolbar className="toolbarFlex">
-                                    <h1 className="headerList">Tạo tin tức</h1>
-                                </Toolbar>
-                                <div className="createNewsDetail">
-                                    <label htmlFor="">Tiêu đề</label>
-                                    <input type="text" value={title} onChange={handleTitleChange} />
-                                </div>
-                                <div className="createNewsDetail">
-                                    <label htmlFor="">Mô tả ngắn</label>
-                                    <input type="text" value={shortDescription} onChange={handleShortDescriptionChange} />
-                                </div>
-                                <div className="createNewsDetail">
-                                    <label>Ảnh thumbnail</label>
-                                    <div className="input-group">
-                                        <div className="custom-file">
-                                            <input type="file" className="custom-file-input" id="urlImageThumb" onChange={handleImageChange} />
-                                            <input type="hidden" className="custom-file-input" />
-                                            <label className="custom-file-label" id="filePath">Choose file</label>
-                                        </div>
-                                        <div className="input-group-append">
-                                            <span className="input-group-text" id="thumbnailUpload" data-target="#modalAlertCreateUpload" data-toggle="modal">Upload</span>
-                                        </div>
+    if (isLoggedIn) {
+        return (
+            <ThemeProvider theme={defaultTheme}>
+                <Box sx={{ display: 'flex', height: '100vh' }}>
+                    <CssBaseline />
+                    <Header toggleDrawer={toggleDrawer} open={open} />
+                    <Sidebar toggleDrawer={toggleDrawer} open={open} />
+                    <Box
+                        component="main"
+                        sx={{
+                            backgroundColor: (theme) =>
+                                theme.palette.mode === 'light'
+                                    ? theme.palette.grey[100]
+                                    : theme.palette.grey[900],
+                            flexGrow: 1,
+                            height: '100vh',
+                            overflow: 'auto'
+                        }}
+                    >
+                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} md={12} lg={12} sx={{ overflow: 'auto' }}>
+                                    <Toolbar className="toolbarFlex">
+                                        <h1 className="headerList">Tạo tin tức</h1>
+                                    </Toolbar>
+                                    <div className="createNewsDetail">
+                                        <label htmlFor="">Tiêu đề</label>
+                                        <input type="text" value={title} onChange={handleTitleChange} />
                                     </div>
+                                    <div className="createNewsDetail">
+                                        <label htmlFor="">Mô tả ngắn</label>
+                                        <input type="text" value={shortDescription} onChange={handleShortDescriptionChange} />
+                                    </div>
+                                    <div className="createNewsDetail">
+                                        <label>Ảnh thumbnail</label>
+                                        <div className="input-group">
+                                            <div className="custom-file">
+                                                <input type="file" className="custom-file-input" id="urlImageThumb" onChange={handleImageChange} />
+                                            </div>
+                                            <div className="input-group-append">
+                                                <span className="input-group-text" id="thumbnailUpload" data-target="#modalAlertCreateUpload" data-toggle="modal">Upload</span>
+                                            </div>
+                                        </div>
 
-                                </div>
-                                <div className="createNewsDetail">
-                                    <label>News Detail: </label>
-                                    <div className="row">
-                                        <div className="editor">
-                                            <ReactQuill theme="snow" value={content}
-                                                onChange={setContent}
-                                                className="editor-input"
-                                                modules={modules}
-                                            />
+                                    </div>
+                                    <div className="createNewsDetail">
+                                        <label>News Detail: </label>
+                                        <div className="row">
+                                            <div className="editor">
+                                                <ReactQuill theme="snow" value={content}
+                                                    onChange={setContent}
+                                                    className="editor-input"
+                                                    modules={modules}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="btnSave" onClick={handleSaveNews}>Save</div>
+                                    <div className="btnSave" onClick={handleSaveNews}>Save</div>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Container>
+                        </Container>
+                    </Box>
                 </Box>
-            </Box>
-        </ThemeProvider >
-    )
+            </ThemeProvider >
+        )
+    }else{
+        return <Login />
+    }
 }

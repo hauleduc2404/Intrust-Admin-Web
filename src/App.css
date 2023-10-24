@@ -47,3 +47,81 @@
 .headerList{
   color: #000;
 }
+.createNewsDetail{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.createNewsDetail label{
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.createNewsDetail input{
+  height: 40px;
+  outline: none;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  border-radius: 10px;
+}
+.btnSave:hover{
+  background-color: yellowgreen;
+  border: none;
+  color: #000;
+}
+.deleteIcon, .editIcon{
+  cursor: pointer;
+}
+.deleteIcon:hover, .editIcon:hover{
+  color: red;
+}
+
+.popupTable {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+.popupTable-content{
+  position: absolute;
+  background-color:#fff;
+  width: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  border-radius: 10px;
+  max-height: 90%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+}
+.popupTable-bottom{
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 15%;
+  margin-bottom: 20px;
+}
+.popupTable-header{
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 550;
+}
+.closeEdit{
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 25%;
+  margin-bottom: 10px;
+}
+.logout{
+  cursor: pointer;
+}
+.logout:hover{
+  color: red;
+}

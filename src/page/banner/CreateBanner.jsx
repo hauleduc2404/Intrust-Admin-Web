@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
-import './banner.css';
+
 import { uploadFileS3 } from './uploadFileS3';
 
-export default function CreateBanner ({ onClose }) {
+export default function CreateBanner({ onClose }) {
   const [bannerTitle, setBannerTitle] = React.useState();
   const [shortDescription, setShortDescription] = React.useState();
   const [bannerImageUrl, setBannerUrl] = React.useState();
@@ -33,7 +33,6 @@ export default function CreateBanner ({ onClose }) {
       return;
     }
     const imageUrl = await uploadFileS3(selectedFile);
-    console.log(imageUrl);
     if (!imageUrl) {
       alert('Cannot upload file image');
     }
@@ -56,7 +55,7 @@ export default function CreateBanner ({ onClose }) {
       headers: myHeaders,
       body: JSON.stringify(raw)
     };
-    fetch('http://localhost:8081/api/admin/banner/create-banner', requestOptions)
+    fetch('https://intrustca.vn/api/admin/banner/create-banner', requestOptions)
       .then(response => response.json())
       .then(result => { })
       .catch(error => console.log('error', error));
@@ -71,14 +70,11 @@ export default function CreateBanner ({ onClose }) {
       fileReader = new FileReader();
       fileReader.onload = (e) => {
         const { result } = e.target;
-        console.log('result', result);
         if (result && !isCancel) {
           setFileDataURL(result);
         }
-        console.log('fileurl', fileDataURL);
       };
       fileReader.readAsDataURL(selectedFile);
-      console.log('d', fileReader);
     }
     return () => {
       isCancel = true;
@@ -94,32 +90,35 @@ export default function CreateBanner ({ onClose }) {
         <div className="popupTable-header">
           Create API
         </div>
-        <div className="bannerRequest">
-          <div className="bannerHeader">Tiêu đề banner :</div>
-          <input type="email" className="responseText" id="title" placeholder="" value={bannerTitle} onChange={handleInputChangeTitle}></input>
+        <div className="popupTable-center">
+          <div className="createNewsDetail">
+            <label htmlFor="">Tiêu đề banner</label>
+            <input type="text" id="title" placeholder="" value={bannerTitle} onChange={handleInputChangeTitle}></input>
+          </div>
+          <div className="createNewsDetail">
+            <label htmlFor="">Mô tả ngắn</label>
+            <input type="text" id="title" placeholder="" value={shortDescription} onChange={handleInputChangeDes}></input>
+          </div>
+          <div className="createNewsDetail">
+            <label htmlFor="">Trạng thái</label>
+            <select id="selectStatus" className="select" value={selectStatus} onChange={handleInputChangeStatus}>
+              <option value="ALLSTATUS">ALL STATUS</option>
+              <option value="NEW">NEW</option>
+              <option value="ACTIVED">ACTIVED</option>
+              <option value="EXPIRED">EXPIRED</option>
+            </select>
+          </div>
+          <div className='createNewsDetail'>
+            <label htmlFor="">Upload ảnh banner</label>
+            <input type="file" onChange={handleFileChange} value={bannerImageUrl} />
+            {selectedFile && <img id="preview-image" src={fileDataURL} alt="example image"></img>}
+          </div>
         </div>
-        <div className="bannerRequest">
-          <div className="bannerHeader">Mô tả ngắn :</div>
-          <input type="email" className="responseText" id="title" placeholder="" value={shortDescription} onChange={handleInputChangeDes}></input>
+
+        <div className="closeCreate">
+          <Button variant="contained" onClick={handleCreateBanner}>Create</Button>
+          <Button variant="contained" onClick={onClose}>Close</Button>
         </div>
-        <div className="bannerRequest">
-          <label className='bannerHeader'>Trạng thái:</label>
-          <select id="selectStatus" className="select" value={selectStatus} onChange={handleInputChangeStatus}>
-            <option value="ALLSTATUS">ALL STATUS</option>
-            <option value="NEW">NEW</option>
-            <option value="ACTIVED">ACTIVED</option>
-            <option value="EXPIRED">EXPIRED</option>
-          </select>
-        </div>
-        <div className='bannerRequest'>
-          <h2 className='bannerHeader'>Upload ảnh banner :</h2>
-          <input type="file" onChange={handleFileChange} value={bannerImageUrl} />
-          {selectedFile && <img id="preview-image" src={fileDataURL} alt="example image"></img>}
-        </div>
-      </div>
-      <div className="closeCreate">
-        <Button variant="contained" onClick={handleCreateBanner}>Create</Button>
-        <Button variant="contained" onClick={onClose}>Close</Button>
       </div>
     </div>
   );

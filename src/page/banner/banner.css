@@ -1,40 +1,4 @@
-.popupTable{
-    position: relative;
-    background-color:#fff;
-    width: 60%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px;
-    border-radius: 10px;
-    max-height: 100%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    overflow-y: auto;
-}
 
-.bannerHeader, .requestHeader-top{
-    padding-top: 10px;
-    font-weight: 550;
-    font-size: 20px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-}
-
-.bannerRequest{
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.response, .bannerRequest input{
-    width: 90%;
-    border-radius: 5px;
-    padding: 10px;
-    border: 1px solid #000;
-}
 .textarea{
     height: 40px;
     flex: 3;
@@ -62,7 +26,6 @@
     width: 100px;
 }
 .closeCreate{
-    position: relative;
     width: 50%;
     display: flex;
     justify-content: space-between;

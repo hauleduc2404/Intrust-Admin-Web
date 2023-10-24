@@ -2,16 +2,7 @@ import React from 'react';
 import NewsPage from '../news/NewsPage';
 import './Login.css';
 
-function FormatDate (date) {
-  const dataObject = new Date(date);
-  const day = dataObject.getDate();
-  const month = dataObject.getMonth() + 1;
-  const year = dataObject.getFullYear();
-  const formattedDate = `${day}/${month}/${year}`;
-  return formattedDate;
-}
-
-export default function Login () {
+export default function Login() {
   const [username, setUserName] = React.useState();
   const [password, setPassword] = React.useState();
   const [isLoggedIn, setIsLoggedIn] = React.useState(localStorage.getItem('accessToken') != null);
@@ -27,12 +18,12 @@ export default function Login () {
 
     var raw = JSON.stringify(
       {
-          "body": {
-              "username": username,
-              "password": password
-          }
+        "body": {
+          "username": username,
+          "password": password
+        }
       }
-  );
+    );
     const requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -44,40 +35,47 @@ export default function Login () {
       .then(result => {
         if (result.responseCode === '200') {
           localStorage.setItem('accessToken', result.body.token.accessToken);
+          localStorage.setItem('accessExpiredTime', result.body.token.accessExpiredTime)
           localStorage.setItem('refreshExpiredTime', result.body.token.refreshExpiredTime);
           localStorage.setItem('refreshToken', result.body.token.refreshToken);
-          localStorage.setItem('accessExpiredToken', result.body.token.accessExpiredToken);
           localStorage.setItem('time', Date.now());
           setIsLoggedIn(true);
+          window.location.reload();
         } else {
           alert('Mật khẩu hoặc tên đăng nhập không đúng. Vui lòng kiểm tra lại!');
         }
       })
       .catch(err => {
         console.error(err);
+        alert("Mật khẩu hoặc tên đăng nhập không đúng. Vui lòng kiểm tra lại!")
         setIsLoggedIn(false);
       });
   };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  }
   if (isLoggedIn) {
     return <NewsPage />;
   } else {
     return (
-            <div className="main">
-                <div className="login-body">
-                    <div className="login">
-                        <div className="loginLeft">
-                            <img src={require('../../assets/img/key-solution.png')} alt=""></img>
-                        </div>
-                        <div className="loginRight">
-                            <h1>Welcome!</h1>
-                            <input type="text" placeholder="Username" className="user-icon" id="username" onChange={handleInputChangeUser} />
-                            <input type="password" placeholder="Password" className="pass-icon" id="password" onChange={handleInputChangePassword} />
-                            <span id="validate"></span>
-                            <button id="signin" onClick={handleLogin}>Đăng nhập</button>
-                        </div>
-                    </div>
-                </div>
+      <div className="main">
+        <div className="login-body">
+          <div className="login">
+            <div className="loginLeft">
+              <img src={require('../../assets/img/key-solution.png')} alt=""></img>
             </div>
+            <div className="loginRight">
+              <h1>Welcome!</h1>
+              <input type="text" placeholder="Username" className="user-icon" id="username" onChange={handleInputChangeUser} onKeyPress={handleKeyPress} />
+              <input type="password" placeholder="Password" className="pass-icon" id="password" onChange={handleInputChangePassword} onKeyPress={handleKeyPress} />
+              <span id="validate"></span>
+              <button id="signin" onClick={handleLogin}>Đăng nhập</button>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }

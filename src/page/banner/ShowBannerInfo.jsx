@@ -16,7 +16,7 @@ export default function ShowBannerInfo ({ id, onClose }) {
     headers: myHeaders
   };
   useEffect(() => {
-    fetch(`http://localhost:8081/api/admin/banner/get-banner/${id}`, requestOptions)
+    fetch(`https://intrustca.vn/api/admin/banner/get-banner/${id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         setBanner(result.body);

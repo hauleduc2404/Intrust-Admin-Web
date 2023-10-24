@@ -30,7 +30,7 @@ export default function Header ({ toggleDrawer, open }) {
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('accessExpiredToken');
       localStorage.removeItem('time');
-      window.location.href = '/';
+      window.location.reload();
     }
   };
   return (

@@ -16,8 +16,6 @@ export const uploadFileS3 = async (file) => {
       .then(response => response.text())
       .then(result => {
         const responseImageUrl = JSON.parse(result)?.body?.fileUrl;
-        console.log(result);
-        console.log(responseImageUrl);
         urlRes = responseImageUrl;
       })
       .catch(error => console.log('error', error));
